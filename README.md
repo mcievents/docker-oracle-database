@@ -6,6 +6,7 @@ These environment variables can be used to manage the database:
 
 *   `ORACLE_SID`: The SID of the database instance.  Default: `ORCLCDB`.
 *   `ORACLE_PDB`: The service name of the (only) pluggable database.  Default: `ORCLPDB1`.
+*   `ORACLE_PWD`: The password to set for the SYS, SYSTEM, and PDBADMIN accounts.  If not set then a random password will be generated and printed to standard output.
 
 You may want to increase the size of `/dev/shm`.
 
@@ -29,13 +30,10 @@ The following build arguments can also be used:
 *   `INSTALL_FILE_SHASUM`: The SHA256 binary checksum of the Oracle installer archive.
 *   `ORACLE_EDITION`: The Edition of Oracle to install.  Must be one of `EE` (Enterprise Edition) or `SE2` (Standard Edition Two).  Default: `EE`
 
-You may want to increase the size of `/dev/shm` during the build.
-
 Build example:
 
 ```shell
 docker build -t oracle-database:12.2.0.1-ee \
-    --shm-size=1g \
     --build-arg DOWNLOAD_URL_BASE=https://s3.amazonaws.com/path/to/installer/dir \
     --build-arg ORACLE_EDITION=SE2 \
     .
