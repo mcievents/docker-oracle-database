@@ -8,13 +8,22 @@ These environment variables can be used to manage the database:
 *   `ORACLE_PDB`: The service name of the (only) pluggable database.  Default: `ORCLPDB1`.
 *   `ORACLE_PWD`: The password to set for the SYS, SYSTEM, and PDBADMIN accounts.  If not set then a random password will be generated and printed to standard output.
 
+To make your Oracle data persistent beyond the life of the container, use a bind mount or volume at `/opt/oracle/oradata`.
+
 You may want to increase the size of `/dev/shm`.
 
 Run example:
 
 ```shell
-docker run -d --shm-size=1g --name oracle oracle-database:12.2.0.1-ee
+docker run -d \
+    -p 1521:1521 \
+    -v oradata:/opt/oracle/oradata \
+    --shm-size=1g \
+    --name oracle \
+    oracle-database:12.2.0.1-ee
 ```
+
+This example publishes the Oracle listener's TCP port to port 1521 on the Docker host.  It also assumes that you have created a Docker volume called `oradata`.
 
 # Building the image
 
