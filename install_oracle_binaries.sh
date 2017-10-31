@@ -34,7 +34,7 @@ sed -i \
     $INSTALL_DIR/db_inst.rsp
 
 cd $INSTALL_DIR
-wget $DOWNLOAD_URL_BASE/$INSTALL_FILE
+wget --read-timeout 60 $DOWNLOAD_URL_BASE/$INSTALL_FILE
 echo "$INSTALL_FILE_SHASUM *$INSTALL_FILE" | sha256sum -c
 unzip $INSTALL_FILE
 rm $INSTALL_FILE
