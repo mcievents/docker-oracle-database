@@ -8,8 +8,20 @@ export ORACLE_SID=${ORACLE_SID:-ORCLCDB}
 export ORACLE_PDB=${ORACLE_PDB:-ORCLPDB1}
 
 # Set ORACLE_PWD default.
-export ORACLE_PWD=${ORACLE_PWD:-"`openssl rand -base64 12`"}
-echo "ORACLE PASSWORD FOR SYS, SYSTEM AND PDBADMIN: $ORACLE_PWD";
+if [ -z "$ORACLE_PWD" ]; then
+    if [ -f /run/secrets/oracle_admin_password ]; then
+        export ORACLE_PWD=`cat /run/secrets/oracle_admin_password`
+        echo 'Oracle admin password read from Docker secret.'
+    else
+        export ORACLE_PWD=${ORACLE_PWD:-"`openssl rand -base64 12`"}
+        echo 'Generated random Oracle admin password.'
+        echo "ORACLE PASSWORD FOR SYS, SYSTEM AND PDBADMIN: $ORACLE_PWD"
+    fi
+else
+    echo 'Oracle admin password read from environment.'
+fi
+
+mkdir -p $ORACLE_BASE/oradata/$ORACLE_SID
 
 # Set ORACLE_CHARACTERSET default.
 export ORACLE_CHARACTERSET=${ORACLE_CHARACTERSET:-AL32UTF8}
